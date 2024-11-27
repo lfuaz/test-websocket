@@ -1,0 +1,20 @@
+services:
+  websocket-server:
+    build: .
+    container_name: websocket-server
+    labels:
+      - "coolify.application=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.websocket-server.rule=Host(`florianurena.ovh`)"
+      - "traefik.http.routers.websocket-server.entrypoints=web"
+      - "traefik.http.services.websocket-server.loadbalancer.server.port=8080"
+      - "traefik.http.middlewares.websocket-server-headers.headers.customrequestheaders.Upgrade=websocket"
+      - "traefik.http.middlewares.websocket-server-headers.headers.customrequestheaders.Connection=Upgrade"
+    networks:
+      - coolify-internal
+    expose:
+      - 8080
+
+networks:
+  coolify-internal:
+    external: true
